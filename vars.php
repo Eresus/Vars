@@ -6,7 +6,7 @@
  *
  * Создание собственных текстовых переменных
  *
- * @version 1.05
+ * @version 1.06
  *
  * @copyright   2007-2008, Eresus Group, http://eresus.ru/
  * @license     http://www.gnu.org/licenses/gpl.txt  GPL License 3
@@ -35,7 +35,7 @@ class TVars extends TListContentPlugin {
 	var $name = 'vars';
 	var $title = 'Vars';
 	var $type = 'client,admin';
-	var $version = '1.05';
+	var $version = '1.06';
 	var $description = 'Создание собственных текстовых переменных';
 	var $settings = array(
 			);
@@ -45,9 +45,9 @@ class TVars extends TListContentPlugin {
 		'sortMode' => 'caption',
 		'sortDesc' => false,
 		'columns' => array(
-			array('name' => 'caption', 'caption' => 'Переменная'),
 			array('name' => 'name', 'caption' => 'Имя', 'value' => '&#36;($(name))', 'macros' => true),
-		),
+			array('name' => 'caption', 'caption' => 'Описание'),
+			),
 		'controls' => array (
 			'delete' => '',
 			'edit' => '',
@@ -122,12 +122,12 @@ class TVars extends TListContentPlugin {
 
 		$form = array(
 			'name' => 'AddForm',
-			'caption' => 'Добавить переменную',
+			'caption' => strAdd,
 			'width'=>'500px',
 			'fields' => array (
 				array ('type' => 'hidden', 'name' => 'action', 'value' => 'insert'),
-				array ('type' => 'edit', 'name' => 'caption', 'label' => 'Переменная ', 'width' => '100%', 'maxlength' => '63', 'pattern' => '/.+/', 'errormsg' => 'Не указано название переменной'),
-				array ('type' => 'edit', 'name' => 'name', 'label' => 'Имя $(', 'width' => '300px', 'maxlength' => '31', 'comment' => ')', 'pattern' => '/.+/', 'errormsg' => 'Не указано имя переменной'),
+				array ('type' => 'edit', 'name' => 'name', 'label' => 'Имя $(', 'width' => '200px', 'maxlength' => '31', 'comment' => ')', 'pattern' => '/.+/', 'errormsg' => 'Не указано имя переменной'),
+				array ('type' => 'edit', 'name' => 'caption', 'label' => 'Описание', 'width' => '100%', 'maxlength' => '63', 'pattern' => '/.+/', 'errormsg' => 'Не указано название переменной'),
 				array ('type' => 'memo', 'name' => 'value', 'label' => 'Значение', 'height' => '10'),
 			),
 			'buttons' => array('ok', 'cancel'),
@@ -149,12 +149,12 @@ class TVars extends TListContentPlugin {
 		$item = $Eresus->db->selectItem($this->table['name'], "`name`='".arg('id', 'word')."'");
 		$form = array(
 			'name' => 'EditForm',
-			'caption' => 'Изменить переменную',
+			'caption' => strEdit,
 			'width' => '500px',
 			'fields' => array (
-				array('type'=>'hidden','name'=>'update', 'value'=>$item['name']),
-				array ('type' => 'edit', 'name' => 'caption', 'label' => 'Переменная ', 'width' => '100%', 'maxlength' => '63', 'pattern' => '/.+/', 'errormsg' => 'Не указано название переменной'),
-				array ('type' => 'edit', 'name' => 'name', 'label' => 'Имя $(', 'width' => '300px', 'maxlength' => '31', 'comment' => ')', 'pattern' => '/.+/', 'errormsg' => 'Не указано имя переменной'),
+				array ('type' => 'hidden', 'name' => 'update', 'value' => $item['name']),
+				array ('type' => 'edit', 'name' => 'name', 'label' => 'Имя $(', 'width' => '200px', 'maxlength' => '31', 'comment' => ')', 'pattern' => '/.+/', 'errormsg' => 'Не указано имя переменной'),
+				array ('type' => 'edit', 'name' => 'caption', 'label' => 'Описание', 'width' => '100%', 'maxlength' => '63', 'pattern' => '/.+/', 'errormsg' => 'Не указано название переменной'),
 				array ('type' => 'memo', 'name' => 'value', 'label' => 'Значение', 'height' => '10'),
 			),
 			'buttons' => array('ok', 'apply', 'cancel'),
@@ -188,4 +188,3 @@ class TVars extends TListContentPlugin {
 	//-----------------------------------------------------------------------------
 }
 
-?>
