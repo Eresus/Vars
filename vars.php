@@ -6,7 +6,7 @@
  *
  * —оздание собственных текстовых переменных
  *
- * @version 1.06
+ * @version 1.07
  *
  * @copyright   2007-2008, Eresus Group, http://eresus.ru/
  * @license     http://www.gnu.org/licenses/gpl.txt  GPL License 3
@@ -35,7 +35,7 @@ class TVars extends TListContentPlugin {
 	var $name = 'vars';
 	var $title = 'Vars';
 	var $type = 'client,admin';
-	var $version = '1.06';
+	var $version = '1.07';
 	var $description = '—оздание собственных текстовых переменных';
 	var $settings = array(
 			);
