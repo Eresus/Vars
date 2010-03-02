@@ -41,6 +41,13 @@
 class TVars extends TListContentPlugin
 {
 	var $name = 'vars';
+
+	/**
+	 * Требуемая версия ядра
+	 * @var string
+	 */
+	public $kernel = '2.12b';
+
 	var $title = 'Vars';
 	var $type = 'client,admin';
 	var $version = '1.07a';
@@ -101,7 +108,7 @@ class TVars extends TListContentPlugin
 			'value' => arg('value', 'dbsafe'),
 		);
 		$Eresus->db->insert($this->table['name'], $item);
-		goto(arg('submitURL'));
+		HTTP::redirect(arg('submitURL'));
 	}
 	//-----------------------------------------------------------------------------
  /**
@@ -117,7 +124,7 @@ class TVars extends TListContentPlugin
 		$item['value'] = arg('value', 'dbsafe');
 
 		$Eresus->db->updateItem($this->table['name'], $item, "`name`='".arg('update', 'word')."'");
-		goto(arg('submitURL'));
+		HTTP::redirect(arg('submitURL'));
 	}
 	//-----------------------------------------------------------------------------
  /**
