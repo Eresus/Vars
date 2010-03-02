@@ -50,7 +50,7 @@ class TVars extends TListContentPlugin
 
 	var $title = 'Vars';
 	var $type = 'client,admin';
-	var $version = '1.07a';
+	var $version = '1.07b';
 	var $description = '—оздание собственных текстовых переменных';
 	var $settings = array(
 			);
