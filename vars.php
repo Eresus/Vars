@@ -8,10 +8,10 @@
  *
  * @version 1.07
  *
- * @copyright   2007-2008, Eresus Group, http://eresus.ru/
- * @license     http://www.gnu.org/licenses/gpl.txt  GPL License 3
- * @maintainer  Mikhail Krasilnikov <mk@procreat.ru>
- * @author      Mikhail Krasilnikov <mk@procreat.ru>
+ * @copyright 2007, Eresus Group, http://eresus.ru/
+ * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
+ * @license http://www.gnu.org/licenses/gpl.txt  GPL License 3
+ * @author Mikhail Krasilnikov <mk@procreat.ru>
  *
  * Данная программа является свободным программным обеспечением. Вы
  * вправе распространять ее и/или модифицировать в соответствии с
@@ -29,13 +29,21 @@
  * GNU с этой программой. Если Вы ее не получили, смотрите документ на
  * <http://www.gnu.org/licenses/>
  *
+ * @package Vars
+ *
+ * $Id$
  */
 
-class TVars extends TListContentPlugin {
+/**
+ * Класс плагина
+ * @package Vars
+ */
+class TVars extends TListContentPlugin
+{
 	var $name = 'vars';
 	var $title = 'Vars';
 	var $type = 'client,admin';
-	var $version = '1.07';
+	var $version = '1.07a';
 	var $description = 'Создание собственных текстовых переменных';
 	var $settings = array(
 			);
@@ -65,16 +73,17 @@ class TVars extends TListContentPlugin {
 			PRIMARY KEY  (`name`)
 		) TYPE=MyISAM;",
 	);
- /**
-	* Конструктор
-	*
-	* @return TVars
-	*/
-	function TVars()
+
+	/**
+	 * Конструктор
+	 *
+	 * @return TVars
+	 */
+	function __construct()
 	{
 		global $Eresus;
 
-		parent::TListContentPlugin();
+		parent::__construct();
 		$Eresus->plugins->events['clientOnPageRender'][] = $this->name;
 		$Eresus->plugins->events['adminOnMenuRender'][] = $this->name;
 	}
