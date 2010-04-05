@@ -50,11 +50,11 @@ class TVars extends TListContentPlugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '2.12b';
+	public $kernel = '2.12';
 
 	var $title = 'Vars';
 	var $type = 'client,admin';
-	var $version = '1.07b';
+	var $version = '1.07';
 	var $description = 'Создание собственных текстовых переменных';
 	var $settings = array(
 			);
