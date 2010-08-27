@@ -96,14 +96,23 @@ class Vars extends Plugin
 	 */
 	private function insert()
 	{
-		global $Eresus;
-
 		$item = array(
 			'name' => arg('name', 'word'),
 			'caption' => arg('caption', 'dbsafe'),
 			'value' => arg('value', 'dbsafe'),
 		);
-		$Eresus->db->insert($this->table['name'], $item);
+
+		$tmp = $this->dbItem('', $item['name'], 'name');
+		if (!$tmp)
+		{
+			$this->dbInsert('', $item, 'name');
+		}
+		else
+		{
+			ErrorMessage('Переменная с именем "' . $item['name'] . '" уже существует. Выберите другое имя.');
+			HTTP::goback();
+		}
+
 		HTTP::redirect(arg('submitURL'));
 	}
 	//-----------------------------------------------------------------------------
@@ -121,6 +130,16 @@ class Vars extends Plugin
 		$item['name'] = arg('name', 'word');
 		$item['caption'] = arg('caption', 'dbsafe');
 		$item['value'] = arg('value', 'dbsafe');
+
+		if ($item['name'] != $oldName)
+		{
+			$tmp = $this->dbItem('', $item['name'], 'name');
+			if ($tmp)
+			{
+				ErrorMessage('Переменная с именем "' . $item['name'] . '" уже существует. Выберите другое имя.');
+				HTTP::redirect(arg('submitURL'));
+			}
+		}
 
 		$this->dbUpdate('', "`name` = {$item['name']}, `caption` = {$item['caption']}, " .
 			"`value` = {$item['value']}", "`name` = '$oldName'");
