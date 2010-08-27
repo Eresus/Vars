@@ -285,7 +285,7 @@ class Vars extends Plugin
 		}
 		else
 		{
-			ErrorMessage('Переменной с именем "' . $name . '" не найдено');
+			ErrorMessage('Переменной с именем "' . $name . '" не найдено.');
 		}
 		HTTP::redirect(str_replace('&amp;', '&', $page->url()));
 	}
