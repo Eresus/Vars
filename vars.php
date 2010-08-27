@@ -115,15 +115,24 @@ class Vars extends Plugin
 	 */
 	private function update()
 	{
-		global $Eresus;
+		$oldName = arg('update', 'word');
+		$item = $this->dbItem('', $oldName, 'name');
 
-		$item = $Eresus->db->selectItem($this->table['name'], "`name`='".arg('update', 'word')."'");
 		$item['name'] = arg('name', 'word');
 		$item['caption'] = arg('caption', 'dbsafe');
 		$item['value'] = arg('value', 'dbsafe');
 
-		$Eresus->db->updateItem($this->table['name'], $item, "`name`='".arg('update', 'word')."'");
-		HTTP::redirect(arg('submitURL'));
+		$this->dbUpdate('', "`name` = {$item['name']}, `caption` = {$item['caption']}, " .
+			"`value` = {$item['value']}", "`name` = '$oldName'");
+
+		$url = arg('submitURL');
+
+		if ($item['name'] != $oldName)
+		{
+			$url = str_replace('id=' . $oldName, 'id=' . $item['name'], $url);
+		}
+
+		HTTP::redirect($url);
 	}
 	//-----------------------------------------------------------------------------
 
