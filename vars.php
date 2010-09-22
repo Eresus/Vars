@@ -125,7 +125,6 @@ class Vars extends Plugin
 		$item['name'] = arg('name', 'word');
 		$item['caption'] = arg('caption', 'dbsafe');
 		$item['value'] = arg('value', 'dbsafe');
-
 		if ($item['name'] != $oldName)
 		{
 			$tmp = $this->dbItem('', $item['name'], 'name');
@@ -137,8 +136,16 @@ class Vars extends Plugin
 			}
 		}
 
-		$this->dbUpdate('', "`name` = {$item['name']}, `caption` = {$item['caption']}, " .
-			"`value` = {$item['value']}", "`name` = '$oldName'");
+		$q = DB::getHandler()->createUpdateQuery();
+		$q->update($this->__table(''))
+			->where($q->expr->eq('name', $q->bindValue($oldName, null, PDO::PARAM_STR)));
+
+		foreach ($item as $key => $value)
+		{
+			$q->set($key, $q->bindValue($value));
+		}
+
+		DB::execute($q);
 
 		$url = arg('submitURL');
 
