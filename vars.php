@@ -66,7 +66,7 @@ class Vars extends Plugin
 		'tabs' => array(
 			'width'=>'180px',
 			'items'=>array(
-			 array('caption'=>strAdd, 'name'=>'action', 'value'=>'create')
+				array('caption'=>strAdd, 'name'=>'action', 'value'=>'create')
 			),
 		)
 	);
@@ -103,7 +103,8 @@ class Vars extends Plugin
 		}
 		else
 		{
-			ErrorMessage('Переменная с именем "' . $item['name'] . '" уже существует. Выберите другое имя.');
+			ErrorMessage('Переменная с именем "' . $item['name'] .
+				'" уже существует. Выберите другое имя.');
 			HTTP::goback();
 		}
 
@@ -130,7 +131,8 @@ class Vars extends Plugin
 			$tmp = $this->dbItem('', $item['name'], 'name');
 			if ($tmp)
 			{
-				ErrorMessage('Переменная с именем "' . $item['name'] . '" уже существует. Выберите другое имя.');
+				ErrorMessage('Переменная с именем "' . $item['name'] .
+					'" уже существует. Выберите другое имя.');
 				HTTP::redirect(arg('submitURL'));
 			}
 		}
@@ -258,8 +260,12 @@ class Vars extends Plugin
 		global $Eresus;
 
 		$items = $Eresus->db->select($this->table['name']);
-		if (count($items)) foreach ($items as $item) {
-			$text= str_replace('$('.$item['name'].')', $item['value'], $text);
+		if (count($items))
+		{
+			foreach ($items as $item)
+			{
+				$text= str_replace('$('.$item['name'].')', $item['value'], $text);
+			}
 		}
 		return $text;
 	}
