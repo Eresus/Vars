@@ -42,7 +42,7 @@ class Vars extends Plugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '2.12';
+	public $kernel = '2.14';
 
 	var $title = 'Vars';
 	var $type = 'client,admin';
