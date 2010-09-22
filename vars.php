@@ -68,13 +68,7 @@ class Vars extends Plugin
 			'items'=>array(
 			 array('caption'=>strAdd, 'name'=>'action', 'value'=>'create')
 			),
-		),
-		'sql' => "(
-			`name` varchar(31) NOT NULL,
-			`caption` varchar(63) NOT NULL,
-			`value` text NOT NULL,
-			PRIMARY KEY  (`name`)
-		) TYPE=MyISAM;",
+		)
 	);
 
 	/**
@@ -283,17 +277,23 @@ class Vars extends Plugin
 	}
 	//-----------------------------------------------------------------------------
 
-	function install()
+	/**
+	 * (non-PHPdoc)
+	 * @see main/core/Plugin::install()
+	 */
+	public function install()
 	{
-		$this->createTable($this->table);
 		parent::install();
-	}
 
-	private function createTable($table)
-	{
-		global $Eresus;
+		$sql = "
+			`name` varchar(31) NOT NULL,
+			`caption` varchar(63) NOT NULL,
+			`value` text NOT NULL,
+			PRIMARY KEY  (`name`)
+		";
 
-		$Eresus->db->query('CREATE TABLE IF NOT EXISTS `'.$Eresus->db->prefix.$table['name'].'`'.$table['sql']);
+		$this->dbCreateTable($sql, '');
+
 	}
 	//-----------------------------------------------------------------------------
 
