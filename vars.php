@@ -4,7 +4,7 @@
  *
  * Создание собственных текстовых переменных
  *
- * @version 2.01
+ * @version 2.02
  *
  * @copyright 2007, Eresus Group, http://eresus.ru/
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
@@ -46,7 +46,7 @@ class Vars extends Plugin
 
 	var $title = 'Vars';
 	var $type = 'client,admin';
-	var $version = '2.01a';
+	var $version = '2.02a';
 	var $description = 'Создание собственных текстовых переменных';
 	var $settings = array(
 			);
