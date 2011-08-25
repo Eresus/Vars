@@ -50,6 +50,7 @@ class Vars extends Plugin
 	var $description = 'Создание собственных текстовых переменных';
 	var $settings = array(
 			);
+	var $maxsize = 65536;
 	var $table = array (
 		'name' => 'vars',
 		'key'=> 'name',
@@ -95,7 +96,11 @@ class Vars extends Plugin
 			'caption' => arg('caption', 'dbsafe'),
 			'value' => arg('value', 'dbsafe'),
 		);
-
+		if(strlen($item['value']) > $this->maxsize)
+		{
+			ErrorMessage("Размер переменной не должен превышать {$this->maxsize} символов.");
+			HTTP::redirect(arg('submitURL'));
+		}
 		$tmp = $this->dbItem('', $item['name'], 'name');
 		if (!$tmp)
 		{
@@ -121,10 +126,16 @@ class Vars extends Plugin
 	{
 		$oldName = arg('update', 'word');
 		$item = $this->dbItem('', $oldName, 'name');
+		if(strlen($item['value']) > $this->maxsize)
+		{
+			ErrorMessage("Размер переменной не должен превышать {$this->maxsize} символов.");
+			HTTP::redirect(arg('submitURL'));
+		}
 
 		$item['name'] = arg('name', 'word');
 		$item['caption'] = arg('caption', 'dbsafe');
 		$item['value'] = arg('value', 'dbsafe');
+		die();
 		if ($item['name'] != $oldName)
 		{
 			$tmp = $this->dbItem('', $item['name'], 'name');
