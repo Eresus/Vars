@@ -135,7 +135,6 @@ class Vars extends Plugin
 		$item['name'] = arg('name', 'word');
 		$item['caption'] = arg('caption', 'dbsafe');
 		$item['value'] = arg('value', 'dbsafe');
-		die();
 		if ($item['name'] != $oldName)
 		{
 			$tmp = $this->dbItem('', $item['name'], 'name');
