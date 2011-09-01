@@ -111,7 +111,106 @@ class Vars extends Plugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Äîáàâëåíèå
+	 * Âîçâğàùàåò ğàçìåòêó èíòåğôåéñà
+	 *
+	 * @return string  HTML
+	 */
+	public function adminRender()
+	{
+		$result = '';
+
+		switch (true)
+		{
+			case !is_null(arg('update')):
+				$this->update();
+			break;
+
+			case !is_null(arg('delete')):
+				$this->delete(arg('delete', 'dbsafe'));
+			break;
+
+			case !is_null(arg('id')):
+				$result = $this->adminEditItem();
+			break;
+
+			case !is_null(arg('action')):
+				switch (arg('action'))
+				{
+					case 'create':
+						$result = $this->adminAddItem();
+					break;
+
+					case 'insert':
+						$this->insert();
+					break;
+				}
+			break;
+
+			default:
+				$result = $GLOBALS['page']->renderTable($this->table);
+			break;
+		}
+		return $result;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Ïğîèçâîäèò ïîäñòàíîâêó ïåğåìåííûõ
+	 *
+	 * @param string $text  ğàçìåòêà ñòğàíèöû
+	 *
+	 * @return string  HTML
+	 */
+	public function clientOnPageRender($text)
+	{
+		$items = $this->dbSelect('');
+		if (count($items))
+		{
+			foreach ($items as $item)
+			{
+				$text= str_replace('$(' . $item['name'] . ')', $item['value'], $text);
+			}
+		}
+		return $text;
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Äîáàâëÿåò ïóíêò «Ïåğåìåííûå» â ìåíş «Ğàñøèğåíèÿ»
+	 *
+	 * @return void
+	 */
+	function adminOnMenuRender()
+	{
+		$GLOBALS['page']->addMenuItem('Ğàñøèğåíèÿ', array(
+			'access' => EDITOR,
+			'link' => $this->name,
+			'caption' => 'Ïåğåìåííûå',
+			'hint'  => 'Óïğàâëåíèå òåêñòîâûìè ïåğåìåííûìè'
+		));
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * @see main/core/Plugin::install()
+	 */
+	public function install()
+	{
+		parent::install();
+
+		$sql = "
+			`name` varchar(31) NOT NULL,
+			`caption` varchar(63) NOT NULL,
+			`value` text NOT NULL,
+			PRIMARY KEY  (`name`)
+		";
+
+		$this->dbCreateTable($sql, '');
+	}
+	//-----------------------------------------------------------------------------
+
+	/**
+	 * Äîáàâëÿåò ïåğåìåííóş â ÁÄ
 	 *
 	 * @return void
 	 */
@@ -125,7 +224,7 @@ class Vars extends Plugin
 		if (strlen($item['value']) > self::MAX_VAR_SIZE)
 		{
 			ErrorMessage('Ğàçìåğ ïåğåìåííîé íå äîëæåí ïğåâûøàòü ' . self::MAX_VAR_SIZE . ' ñèìâîëîâ.');
-			HTTP::redirect(arg('submitURL'));
+			HTTP::goback();
 		}
 		$tmp = $this->dbItem('', $item['name'], 'name');
 		if (!$tmp)
@@ -144,7 +243,7 @@ class Vars extends Plugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Èçìåíåíèå
+	 * Èçìåíÿåò ïåğåìåííóş â ÁÄ
 	 *
 	 * @return void
 	 */
@@ -155,7 +254,7 @@ class Vars extends Plugin
 		if (strlen($item['value']) > self::MAX_VAR_SIZE)
 		{
 			ErrorMessage('Ğàçìåğ ïåğåìåííîé íå äîëæåí ïğåâûøàòü ' . self::MAX_VAR_SIZE . ' ñèìâîëîâ.');
-			HTTP::redirect(arg('submitURL'));
+			HTTP::goback();
 		}
 
 		$item['name'] = arg('name', 'word');
@@ -201,8 +300,6 @@ class Vars extends Plugin
 	 */
 	private function adminAddItem()
 	{
-		global $page;
-
 		$form = array(
 			'name' => 'AddForm',
 			'caption' => 'Äîáàâëåíèå ïåğåìåííîé',
@@ -219,7 +316,7 @@ class Vars extends Plugin
 			'buttons' => array('ok', 'cancel'),
 		);
 
-		$result = $page->renderForm($form);
+		$result = $GLOBALS['page']->renderForm($form);
 		return $result;
 	}
 	//-----------------------------------------------------------------------------
@@ -231,9 +328,7 @@ class Vars extends Plugin
 	 */
 	private function adminEditItem()
 	{
-		global $Eresus, $page;
-
-		$item = $Eresus->db->selectItem($this->table['name'], "`name`='".arg('id', 'word')."'");
+		$item = $this->dbItem('', arg('id', 'word'), 'name');
 		$form = array(
 			'name' => 'EditForm',
 			'caption' => 'Èçìåíåíèå ïåğåìåííîé',
@@ -249,100 +344,8 @@ class Vars extends Plugin
 			),
 			'buttons' => array('ok', 'apply', 'cancel'),
 		);
-		$result = $page->renderForm($form, $item);
+		$result = $GLOBALS['page']->renderForm($form, $item);
 		return $result;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * Âîçâğàùàåò ğàçìåòêó èíòåğôåéñà
-	 *
-	 * @return string  HTML
-	 */
-	function adminRender()
-	{
-		global $page;
-
-		$result = '';
-
-		switch (true)
-		{
-			case !is_null(arg('update')):
-				$this->update();
-			break;
-			case !is_null(arg('delete')):
-				$this->delete(arg('delete', 'dbsafe'));
-			break;
-			case !is_null(arg('id')):
-				$result = $this->adminEditItem();
-			break;
-			case !is_null(arg('action')):
-				switch (arg('action'))
-				{
-					case 'create':
-						$result = $this->adminAddItem();
-					break;
-					case 'insert':
-						$this->insert();
-					break;
-				}
-			break;
-			default:
-				$result = $page->renderTable($this->table);
-		}
-		return $result;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 *
-	 * @return string
-	 */
-	function clientOnPageRender($text)
-	{
-		global $Eresus;
-
-		$items = $Eresus->db->select($this->table['name']);
-		if (count($items))
-		{
-			foreach ($items as $item)
-			{
-				$text= str_replace('$('.$item['name'].')', $item['value'], $text);
-			}
-		}
-		return $text;
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * @return void
-	 */
-	function adminOnMenuRender()
-	{
-		global $page;
-
-		$page->addMenuItem('Ğàñøèğåíèÿ', array ("access"  => EDITOR, "link"  => $this->name,
-			"caption"  => 'Ïåğåìåííûå', "hint"  => "Óïğàâëåíèå òåêñòîâûìè ïåğåìåííûìè"));
-	}
-	//-----------------------------------------------------------------------------
-
-	/**
-	 * (non-PHPdoc)
-	 * @see main/core/Plugin::install()
-	 */
-	public function install()
-	{
-		parent::install();
-
-		$sql = "
-			`name` varchar(31) NOT NULL,
-			`caption` varchar(63) NOT NULL,
-			`value` text NOT NULL,
-			PRIMARY KEY  (`name`)
-		";
-
-		$this->dbCreateTable($sql, '');
-
 	}
 	//-----------------------------------------------------------------------------
 
@@ -353,8 +356,6 @@ class Vars extends Plugin
 	 */
 	private function delete($name)
 	{
-		global $page;
-
 		$item = $this->dbItem('', $name, 'name');
 		if ($item)
 		{
@@ -364,7 +365,7 @@ class Vars extends Plugin
 		{
 			ErrorMessage('Ïåğåìåííîé ñ èìåíåì "' . $name . '" íå íàéäåíî.');
 		}
-		HTTP::redirect(str_replace('&amp;', '&', $page->url()));
+		HTTP::redirect(str_replace('&amp;', '&', $GLOBALS['page']->url()));
 	}
 	//-----------------------------------------------------------------------------
 }
