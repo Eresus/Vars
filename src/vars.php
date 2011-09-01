@@ -39,19 +39,45 @@
 class Vars extends Plugin
 {
 	/**
+	 * Максимальный размер переменной
+	 *
+	 * @var int
+	 */
+	const MAX_VAR_SIZE = 65536;
+
+	/**
 	 * Требуемая версия ядра
 	 * @var string
 	 */
 	public $kernel = '2.14';
 
-	var $title = 'Vars';
-	var $type = 'client,admin';
-	var $version = '2.02a';
-	var $description = 'Создание собственных текстовых переменных';
-	var $settings = array(
-			);
-	var $maxsize = 65536;
-	var $table = array (
+	/**
+	 * Название
+	 *
+	 * @var string
+	 */
+	public $title = 'Переменные';
+
+	/**
+	 * Версия
+	 *
+	 * @var string
+	 */
+	public $version = '2.02a';
+
+	/**
+	 * Описание
+	 *
+	 * @var string
+	 */
+	public $description = 'Создание собственных текстовых переменных';
+
+	/**
+	 * Таблица
+	 *
+	 * @var array
+	 */
+	public $table = array (
 		'name' => 'vars',
 		'key'=> 'name',
 		'sortMode' => 'caption',
@@ -67,7 +93,7 @@ class Vars extends Plugin
 		'tabs' => array(
 			'width'=>'180px',
 			'items'=>array(
-				array('caption'=>strAdd, 'name'=>'action', 'value'=>'create')
+				array('caption' => 'Добавить', 'name'=>'action', 'value'=>'create')
 			),
 		)
 	);
@@ -75,9 +101,9 @@ class Vars extends Plugin
 	/**
 	 * Конструктор
 	 *
-	 * @return TVars
+	 * @return Vars
 	 */
-	function __construct()
+	public function __construct()
 	{
 		parent::__construct();
 		$this->listenEvents('clientOnPageRender', 'adminOnMenuRender');
@@ -96,9 +122,9 @@ class Vars extends Plugin
 			'caption' => arg('caption', 'dbsafe'),
 			'value' => arg('value', 'dbsafe'),
 		);
-		if(strlen($item['value']) > $this->maxsize)
+		if (strlen($item['value']) > self::MAX_VAR_SIZE)
 		{
-			ErrorMessage("Размер переменной не должен превышать {$this->maxsize} символов.");
+			ErrorMessage('Размер переменной не должен превышать ' . self::MAX_VAR_SIZE . ' символов.');
 			HTTP::redirect(arg('submitURL'));
 		}
 		$tmp = $this->dbItem('', $item['name'], 'name');
@@ -126,9 +152,9 @@ class Vars extends Plugin
 	{
 		$oldName = arg('update', 'word');
 		$item = $this->dbItem('', $oldName, 'name');
-		if(strlen($item['value']) > $this->maxsize)
+		if (strlen($item['value']) > self::MAX_VAR_SIZE)
 		{
-			ErrorMessage("Размер переменной не должен превышать {$this->maxsize} символов.");
+			ErrorMessage('Размер переменной не должен превышать ' . self::MAX_VAR_SIZE . ' символов.');
 			HTTP::redirect(arg('submitURL'));
 		}
 
@@ -179,7 +205,7 @@ class Vars extends Plugin
 
 		$form = array(
 			'name' => 'AddForm',
-			'caption' => strAdd,
+			'caption' => 'Добавление переменной',
 			'width'=>'500px',
 			'fields' => array (
 				array ('type' => 'hidden', 'name' => 'action', 'value' => 'insert'),
@@ -210,7 +236,7 @@ class Vars extends Plugin
 		$item = $Eresus->db->selectItem($this->table['name'], "`name`='".arg('id', 'word')."'");
 		$form = array(
 			'name' => 'EditForm',
-			'caption' => strEdit,
+			'caption' => 'Изменение переменной',
 			'width' => '500px',
 			'fields' => array (
 				array ('type' => 'hidden', 'name' => 'update', 'value' => $item['name']),
