@@ -63,7 +63,7 @@ class Vars extends Plugin
 	 *
 	 * @var string
 	 */
-	public $version = '2.02b';
+	public $version = '2.02';
 
 	/**
 	 * Описание
