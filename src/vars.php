@@ -49,7 +49,7 @@ class Vars extends Plugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '2.14';
+	public $kernel = '3.00b';
 
 	/**
 	 * Название
@@ -63,7 +63,7 @@ class Vars extends Plugin
 	 *
 	 * @var string
 	 */
-	public $version = '2.02a';
+	public $version = '3.00a';
 
 	/**
 	 * Описание
@@ -221,9 +221,10 @@ class Vars extends Plugin
 			'caption' => arg('caption', 'dbsafe'),
 			'value' => arg('value', 'dbsafe'),
 		);
+		// Считаем количество байтов, а не символов
 		if (strlen($item['value']) > self::MAX_VAR_SIZE)
 		{
-			ErrorMessage('Размер переменной не должен превышать ' . self::MAX_VAR_SIZE . ' символов.');
+			ErrorMessage('Размер переменной не должен превышать ' . self::MAX_VAR_SIZE . ' байт.');
 			HTTP::goback();
 		}
 		$tmp = $this->dbItem('', $item['name'], 'name');
@@ -251,9 +252,10 @@ class Vars extends Plugin
 	{
 		$oldName = arg('update', 'word');
 		$item = $this->dbItem('', $oldName, 'name');
+		// Считаем количество байтов, а не символов
 		if (strlen($item['value']) > self::MAX_VAR_SIZE)
 		{
-			ErrorMessage('Размер переменной не должен превышать ' . self::MAX_VAR_SIZE . ' символов.');
+			ErrorMessage('Размер переменной не должен превышать ' . self::MAX_VAR_SIZE . ' байт.');
 			HTTP::goback();
 		}
 
@@ -294,7 +296,7 @@ class Vars extends Plugin
 	//-----------------------------------------------------------------------------
 
 	/**
-	 * Диплог добавления
+	 * Диалог добавления
 	 *
 	 * @return string
 	 */
