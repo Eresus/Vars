@@ -4,7 +4,7 @@
  *
  * Создание собственных текстовых переменных
  *
- * @version 2.02
+ * @version 3.00
  *
  * @copyright 2007, Eresus Group, http://eresus.ru/
  * @copyright 2010, ООО "Два слона", http://dvaslona.ru/
