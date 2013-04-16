@@ -49,7 +49,7 @@ class Vars extends Plugin
 	 * Требуемая версия ядра
 	 * @var string
 	 */
-	public $kernel = '3.00';
+	public $kernel = '3.00a';
 
 	/**
 	 * Название
@@ -63,7 +63,7 @@ class Vars extends Plugin
 	 *
 	 * @var string
 	 */
-	public $version = '3.00a';
+	public $version = '3.00';
 
 	/**
 	 * Описание
