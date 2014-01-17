@@ -139,7 +139,9 @@ class Vars extends Plugin
                 }
                 break;
             default:
-                $result = $GLOBALS['page']->renderTable($this->table);
+                /** @var TAdminUI $page */
+                $page = Eresus_Kernel::app()->getPage();
+                $result = $page->renderTable($this->table);
                 break;
         }
         return $result;
@@ -172,7 +174,9 @@ class Vars extends Plugin
      */
     function adminOnMenuRender()
     {
-        $GLOBALS['page']->addMenuItem('Расширения', array(
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $page->addMenuItem('Расширения', array(
             'access' => EDITOR,
             'link' => $this->name,
             'caption' => 'Переменные',
@@ -303,7 +307,9 @@ class Vars extends Plugin
             'buttons' => array('ok', 'cancel'),
         );
 
-        $result = $GLOBALS['page']->renderForm($form);
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form);
         return $result;
     }
 
@@ -330,7 +336,9 @@ class Vars extends Plugin
             ),
             'buttons' => array('ok', 'apply', 'cancel'),
         );
-        $result = $GLOBALS['page']->renderForm($form, $item);
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        $result = $page->renderForm($form, $item);
         return $result;
     }
 
@@ -350,7 +358,9 @@ class Vars extends Plugin
         {
             ErrorMessage('Переменной с именем "' . $name . '" не найдено.');
         }
-        HTTP::redirect(str_replace('&amp;', '&', $GLOBALS['page']->url()));
+        /** @var TAdminUI $page */
+        $page = Eresus_Kernel::app()->getPage();
+        HTTP::redirect(str_replace('&amp;', '&', $page->url()));
     }
 }
 
