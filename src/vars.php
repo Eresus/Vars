@@ -106,7 +106,6 @@ class Vars extends Plugin
         parent::__construct();
         $this->listenEvents('clientOnPageRender', 'adminOnMenuRender');
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Возвращает разметку интерфейса
@@ -122,35 +121,29 @@ class Vars extends Plugin
             case !is_null(arg('update')):
                 $this->update();
                 break;
-
             case !is_null(arg('delete')):
                 $this->delete(arg('delete', 'dbsafe'));
                 break;
-
             case !is_null(arg('id')):
                 $result = $this->adminEditItem();
                 break;
-
             case !is_null(arg('action')):
                 switch (arg('action'))
                 {
                     case 'create':
                         $result = $this->adminAddItem();
                         break;
-
                     case 'insert':
                         $this->insert();
                         break;
                 }
                 break;
-
             default:
                 $result = $GLOBALS['page']->renderTable($this->table);
                 break;
         }
         return $result;
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Производит подстановку переменных
@@ -171,7 +164,6 @@ class Vars extends Plugin
         }
         return $text;
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Добавляет пункт «Переменные» в меню «Расширения»
@@ -187,7 +179,6 @@ class Vars extends Plugin
             'hint' => 'Управление текстовыми переменными'
         ));
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * @see main/core/Plugin::install()
@@ -197,15 +188,13 @@ class Vars extends Plugin
         parent::install();
 
         $sql = "
-			`name` varchar(31) NOT NULL,
-			`caption` varchar(63) NOT NULL,
-			`value` text NOT NULL,
-			PRIMARY KEY  (`name`)
-		";
+            `name` varchar(31) NOT NULL,
+            `caption` varchar(63) NOT NULL,
+            `value` text NOT NULL,
+            PRIMARY KEY  (`name`)";
 
         $this->dbCreateTable($sql, '');
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Добавляет переменную в БД
@@ -239,7 +228,6 @@ class Vars extends Plugin
 
         HTTP::redirect(arg('submitURL'));
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Изменяет переменную в БД
@@ -291,7 +279,6 @@ class Vars extends Plugin
 
         HTTP::redirect($url);
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Диалог добавления
@@ -319,7 +306,6 @@ class Vars extends Plugin
         $result = $GLOBALS['page']->renderForm($form);
         return $result;
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Диалог изменения
@@ -347,7 +333,6 @@ class Vars extends Plugin
         $result = $GLOBALS['page']->renderForm($form, $item);
         return $result;
     }
-    //-----------------------------------------------------------------------------
 
     /**
      * Удаляет переменную
@@ -367,5 +352,5 @@ class Vars extends Plugin
         }
         HTTP::redirect(str_replace('&amp;', '&', $GLOBALS['page']->url()));
     }
-    //-----------------------------------------------------------------------------
 }
+
